@@ -1,12 +1,13 @@
 import classnames from "classnames";
 import { useEffect, useState } from "react";
+import dictionary from "./dictionary.json"
 import "./App.scss";
 
 const LETTERS = "abcdefghijklmnopqrstuvwxyz";
 
 function App() {
   // The word the user is trying to guess
-  const [actualWord] = useState("magic");
+  const [actualWord, setActualWord] = useState(() => randomDictionaryWord());
   // Whether the game is still going
   const [isPlaying, setIsPlaying] = useState(true);
   // The current word
@@ -54,6 +55,7 @@ function App() {
         setIsPlaying(true);
         setBuffer("");
         setHistory([]);
+        setActualWord(randomDictionaryWord());
       }}>
         Reset
       </div>
@@ -95,6 +97,10 @@ function Letter(props: {
     "letter--exactly-correct": props.highlight && props.actualWord[props.idx] === props.guess,
     "letter--almost-correct": props.highlight && props.actualWord.indexOf(props.guess) !== -1
   })}>{props.guess}</div>;
+}
+
+function randomDictionaryWord() {
+  return dictionary[Math.floor(Math.random() * dictionary.length)];;
 }
 
 export default App;
