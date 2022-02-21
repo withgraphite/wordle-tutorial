@@ -1,24 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
 
+const LETTERS = "abcdefghijklmnopqrstuvwxyz";
+
 function App() {
+  // The current word
+  const [buffer, setBuffer] = useState("");
+
+  useEffect(() => {
+    // Called every time the user presses a key on the page
+    const handler = (ev: KeyboardEvent) => {
+      if (ev.key === "Backspace" && buffer.length > 0) {
+        setBuffer(buffer.slice(0, -1));
+      } else if (LETTERS.includes(ev.key) && buffer.length < 5) {
+        setBuffer(buffer + ev.key);
+      }
+    };
+
+    // Register the handler defined above (and unregister it if we update it and need to re-register a new version)
+    document.addEventListener("keydown", handler);
+    return () => {
+      document.removeEventListener("keydown", handler)
+    };
+  }, [buffer]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <div>{buffer}</div>
     </div>
   );
 }
