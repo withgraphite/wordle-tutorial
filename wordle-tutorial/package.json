@@ -1,5 +1,6 @@
 {
   "name": "wordle-tutorial",
+  "homepage": "https://withgraphite.github.io/wordle-tutorial/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
