@@ -7,6 +7,8 @@ const LETTERS = "abcdefghijklmnopqrstuvwxyz";
 function App() {
   // The word the user is trying to guess
   const [actualWord] = useState("magic");
+  // Whether the game is still going
+  const [isPlaying, setIsPlaying] = useState(true);
   // The current word
   const [buffer, setBuffer] = useState("");
   // All previous guesses
@@ -16,6 +18,10 @@ function App() {
     // Called every time the user presses a key on the page
     const handler = (ev: KeyboardEvent) => {
       if (ev.key === "Enter" && buffer.length === 5) {
+        if (buffer === actualWord) {
+          window.alert("You win!");
+          setIsPlaying(false);
+        }
         setHistory((oldValue) => {
           return [...oldValue, buffer];
         });
@@ -28,11 +34,13 @@ function App() {
     };
 
     // Register the handler defined above (and unregister it if we update it and need to re-register a new version)
-    document.addEventListener("keydown", handler);
-    return () => {
-      document.removeEventListener("keydown", handler);
-    };
-  }, [buffer]);
+    if (isPlaying) {
+      document.addEventListener("keydown", handler);
+      return () => {
+        document.removeEventListener("keydown", handler);
+      };
+    }
+  }, [buffer, isPlaying]);
 
   return (
     <div className="guesses">
@@ -41,7 +49,14 @@ function App() {
           <Word key={idx} guess={pastGuess} highlight actualWord={actualWord} />
         );
       })}
-      <Word guess={buffer} actualWord={actualWord} />
+      {isPlaying && <Word guess={buffer} actualWord={actualWord} />}
+      <div className="reset-button" onClick={() => {
+        setIsPlaying(true);
+        setBuffer("");
+        setHistory([]);
+      }}>
+        Reset
+      </div>
     </div>
   );
 }

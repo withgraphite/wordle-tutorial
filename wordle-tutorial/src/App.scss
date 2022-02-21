@@ -39,4 +39,17 @@
       }
     }
   }
+
+  .reset-button {
+    margin-top: 24px;
+    color: #999999;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+
+    &:hover {
+      color: #66CC66;
+    }
+  }
 }
